@@ -30,7 +30,7 @@ public final class OAuthClient {
     if (args.length != 1 || !(args[0].equals("buyer") || args[0].equals("service")))
       throw new IllegalArgumentException("OAuthClient buyer|service");
     String token = args[0].equals("buyer") ? buyerToken() : serviceToken();
-    String path = "/buyer";
+    String path = args[0].equals("buyer") ? "/buyer" : "/service";
     var response =
         HTTP.send(
             HttpRequest.newBuilder(URI.create("http://localhost:8083" + path))

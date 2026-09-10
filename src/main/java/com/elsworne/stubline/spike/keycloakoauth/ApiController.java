@@ -23,4 +23,9 @@ public class ApiController {
   public Map<String, String> operator(@AuthenticationPrincipal Jwt jwt) {
     return Map.of("sub", jwt.getSubject());
   }
+
+  @GetMapping("/service")
+  public Map<String, String> service(@AuthenticationPrincipal Jwt jwt) {
+    return Map.of("sub", jwt.getSubject());
+  }
 }
