@@ -45,16 +45,19 @@ public class SecurityConfig {
   JwtDecoder jwtDecoder(
       @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer) {
     var decoder = NimbusJwtDecoder.withIssuerLocation(issuer).build();
-    OAuth2TokenValidator<Jwt> audience =
-        jwt ->
-            jwt.getAudience().contains("stubline-api")
-                ? OAuth2TokenValidatorResult.success()
-                : OAuth2TokenValidatorResult.failure(
-                    new OAuth2Error("invalid_token", "Missing stubline-api audience", null));
+    OAuth2TokenValidator<Jwt> audience = audienceValidator();
     decoder.setJwtValidator(
         new org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<>(
             JwtValidators.createDefaultWithIssuer(issuer), audience));
     return decoder;
+  }
+
+  static OAuth2TokenValidator<Jwt> audienceValidator() {
+    return jwt ->
+        jwt.getAudience() != null && jwt.getAudience().contains("stubline-api")
+            ? OAuth2TokenValidatorResult.success()
+            : OAuth2TokenValidatorResult.failure(
+                new OAuth2Error("invalid_token", "Missing stubline-api audience", null));
   }
 
   @Bean

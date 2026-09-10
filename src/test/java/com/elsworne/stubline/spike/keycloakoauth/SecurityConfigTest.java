@@ -25,4 +25,16 @@ final class SecurityConfigTest {
     assertTrue(
         auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_operator")));
   }
+
+  @Test
+  void missingAudienceDoesNotCrash() {
+    var jwt =
+        new Jwt(
+            "token",
+            Instant.now(),
+            Instant.now().plusSeconds(60),
+            Map.of("alg", "RS256"),
+            Map.of("sub", "bob"));
+    assertTrue(SecurityConfig.audienceValidator().validate(jwt).hasErrors());
+  }
 }
