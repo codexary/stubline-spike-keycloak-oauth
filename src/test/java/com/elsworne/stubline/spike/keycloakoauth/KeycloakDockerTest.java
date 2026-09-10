@@ -134,11 +134,12 @@ final class KeycloakDockerTest {
                     .build(),
                 HttpResponse.BodyHandlers.ofString());
         assertEquals(200, tokenReply.statusCode(), tokenReply.body());
+        String accessToken =
+            new ObjectMapper().readTree(tokenReply.body()).path("access_token").asText();
         assertEquals(
             200,
-            get(
-                "/buyer",
-                new ObjectMapper().readTree(tokenReply.body()).path("access_token").asText()));
+            get("/buyer", accessToken),
+            "Decoded access token claims: " + decodedClaims(accessToken));
         return;
       }
       reply =
@@ -168,6 +169,10 @@ final class KeycloakDockerTest {
 
   private static String encode(String value) {
     return URLEncoder.encode(value, StandardCharsets.UTF_8);
+  }
+
+  private static String decodedClaims(String token) {
+    return new String(Base64.getUrlDecoder().decode(token.split("\\.")[1]), StandardCharsets.UTF_8);
   }
 
   @Test
