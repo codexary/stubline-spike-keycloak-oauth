@@ -21,6 +21,8 @@ Spring 的 `issuer-uri` 发现 JWKS，检查 `iss`、签名和时间 claims，�
 
 Kerberos 的 KDC authentication server 与 ticket-granting server 大致对应 identity provider。ticket-granting ticket 类似 SSO session 或 refresh token；service ticket 类似指定服务 audience 的 access token。类比在密码学和持有方式上失效：Kerberos 用对称 service key 与 authenticator 证明持有；这里客户端拿到受 TLS 传输保护的已签名 bearer token。PKCE 保护 authorization code 交换，不会把 access token 变成持有证明 token。
 
+Docker 浏览器测试使用仅限 loopback 的 cookie handler：浏览器把 `http://localhost` 当作安全上下文，会送回 Keycloak 的 `Secure` session cookie，而 JDK `CookieManager` 不会。此 handler 只对 `localhost` 和 `127.0.0.1` 请求使用 HTTPS 的 cookie 选择规则。生产客户端应直接使用 HTTPS。
+
 ## 许可证
 
 本仓库采用 [MIT License](LICENSE)。

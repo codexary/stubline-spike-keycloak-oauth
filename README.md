@@ -21,6 +21,8 @@ Spring's `issuer-uri` discovers JWKS and checks `iss`, signature and time claims
 
 Kerberos's KDC authentication server and ticket-granting server roughly correspond to an identity provider. A ticket-granting ticket resembles an SSO session or refresh token; a service ticket resembles an access token scoped to a service audience. The analogy stops at cryptography and possession: Kerberos uses symmetric service keys and authenticators to prove possession, whereas this OAuth2 flow gives the client a signed bearer token protected in transit by TLS. PKCE protects the authorization-code exchange; it does not turn the access token into a proof-of-possession token.
 
+The Docker browser test uses a loopback-only cookie handler: browsers treat `http://localhost` as a secure context and return Keycloak’s `Secure` session cookies, while JDK `CookieManager` does not. The handler uses HTTPS cookie selection only for `localhost` and `127.0.0.1` requests. Production clients should use HTTPS directly.
+
 ## License
 
 This repository is licensed under the [MIT License](LICENSE).
