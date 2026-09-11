@@ -32,3 +32,7 @@ Docker 浏览器测试使用仅限 loopback 的 cookie handler：浏览器把 `h
 本仓库包含一项针对 Stubline 的独立实验。README 说明运行命令与观察结果。
 
 本仓库的代码与文档借助 AI 工具编写；记录的输出都来自实际运行。
+
+## 结论
+
+实验结果及其对后端决策的影响见[FINDINGS.zh-CN.md](FINDINGS.zh-CN.md)。
